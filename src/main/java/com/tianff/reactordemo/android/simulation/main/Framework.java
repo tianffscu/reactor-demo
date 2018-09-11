@@ -4,5 +4,7 @@ public interface Framework {
 
     void run();
 
+    void stop();
 
+    long getLastRefreshTimeMills();
 }
