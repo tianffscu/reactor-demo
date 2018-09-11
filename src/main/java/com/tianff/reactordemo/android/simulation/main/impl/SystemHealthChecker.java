@@ -4,7 +4,7 @@ import com.tianff.reactordemo.android.simulation.main.Framework;
 
 public class SystemHealthChecker {
 
-    private static final long MAX_TIME_INTERVAL_REFRESH_UI = 100;
+    private static final long MAX_TIME_INTERVAL_REFRESH_UI = 500;
     private static Framework framework;
 
     private SystemHealthChecker() {

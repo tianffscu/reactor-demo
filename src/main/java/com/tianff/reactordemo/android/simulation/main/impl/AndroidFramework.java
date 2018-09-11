@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.List;
 
 import static com.tianff.reactordemo.android.simulation.main.impl.SystemHealthChecker.startSystemHealthCheck;
@@ -17,6 +18,8 @@ import static com.tianff.reactordemo.android.simulation.main.impl.SystemHealthCh
 public class AndroidFramework implements Framework {
     private static final Logger LOGGER = LoggerFactory.getLogger(AndroidFramework.class);
 
+    private long systemStartTimeMills;
+    private boolean onclick;
     private List<Activity> activities;
     private List<RuntimeEvent> runtimeEvents;
 
@@ -26,6 +29,8 @@ public class AndroidFramework implements Framework {
 
     @Autowired
     public AndroidFramework(List<Activity> activities, List<RuntimeEvent> runtimeEvents) {
+        this.systemStartTimeMills = System.currentTimeMillis();
+        this.onclick = true;
         this.activities = activities;
         this.runtimeEvents = runtimeEvents;
     }
@@ -50,9 +55,13 @@ public class AndroidFramework implements Framework {
     }
 
     private void processRuntimeEvent() {
-
-        runtimeEvents.forEach(this::dispatch);
-
+        //simulate Random click!
+        if (onclick &&
+                System.currentTimeMillis() - this.systemStartTimeMills
+                        > Duration.ofSeconds(5).toMillis()) {
+            runtimeEvents.forEach(this::dispatch);
+            this.onclick = false;
+        }
     }
 
     private void refreshUI() {
