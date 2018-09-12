@@ -26,7 +26,7 @@ public class ReactorDemoActivity extends MainActivity implements OnClickListener
 
     private List<String> picUrl = new ArrayList<>();
 
-    private List<Disposable> disposableJobs;
+    private List<Disposable> disposableJobs = new ArrayList<>();
 
     @Override
     public void onStart() {
@@ -36,7 +36,17 @@ public class ReactorDemoActivity extends MainActivity implements OnClickListener
 
     @Override
     public void onClick() {
+//        doLongTimeJob();
+
         mockHttpRequest();
+    }
+
+    private void doLongTimeJob() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            LOGGER.error("TEX", e);
+        }
     }
 
     private void initPicUrl() {
@@ -51,7 +61,6 @@ public class ReactorDemoActivity extends MainActivity implements OnClickListener
         Disposable dispo = Observable
                 .create(emitter -> picUrl.forEach(emitter::onNext))
                 .map(item -> {
-                    System.out.println("Map on Thread : " + Thread.currentThread().getName());
                     RestTemplate restTemplate = new RestTemplate(httpMessageConverters);
                     byte[] imageBytes = restTemplate.getForObject((String) item, byte[].class);
                     String fileName = "Image" + System.currentTimeMillis() + ".jpg";

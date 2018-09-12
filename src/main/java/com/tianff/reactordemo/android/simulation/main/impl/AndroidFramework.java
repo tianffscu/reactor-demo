@@ -66,9 +66,9 @@ public class AndroidFramework implements Framework {
 
     private void refreshUI() {
         this.lastRefreshTimeMills = System.currentTimeMillis();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Refresh UI on " + lastRefreshTimeMills);
-        }
+//        if (LOGGER.isDebugEnabled()) {
+//            LOGGER.debug("Refresh UI on " + lastRefreshTimeMills);
+//        }
     }
 
     @Override
