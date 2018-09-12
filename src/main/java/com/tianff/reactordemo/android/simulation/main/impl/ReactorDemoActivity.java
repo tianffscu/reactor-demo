@@ -2,6 +2,7 @@ package com.tianff.reactordemo.android.simulation.main.impl;
 
 import com.tianff.reactordemo.android.simulation.main.OnClickListener;
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,8 @@ public class ReactorDemoActivity extends MainActivity implements OnClickListener
 
     private List<String> picUrl = new ArrayList<>();
 
+    private List<Disposable> disposableJobs;
+
     @Override
     public void onStart() {
         super.onStart();
@@ -45,7 +48,7 @@ public class ReactorDemoActivity extends MainActivity implements OnClickListener
     }
 
     private void mockHttpRequest() {
-        Observable
+        Disposable dispo = Observable
                 .create(emitter -> picUrl.forEach(emitter::onNext))
                 .map(item -> {
                     System.out.println("Map on Thread : " + Thread.currentThread().getName());
@@ -59,5 +62,12 @@ public class ReactorDemoActivity extends MainActivity implements OnClickListener
                 .subscribe(next -> {
                     LOGGER.info("Refreshed image: " + next);
                 });
+        this.disposableJobs.add(dispo);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.disposableJobs.forEach(Disposable::dispose);
     }
 }
